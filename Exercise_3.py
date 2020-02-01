@@ -12,4 +12,7 @@ print("Who said it?")
 author: str = input()
 
 output: str = f'{author} says, \"{quote}"'
+# Option with concatenation instead of f-string: 
+# output: str = author + ' says, \"' + quote + '.\"'
+
 print(output)
