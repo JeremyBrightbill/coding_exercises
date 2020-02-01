@@ -8,11 +8,12 @@ Challenge: If the user enters nothing, state that the user must enter
 something into the program."""
 
 print("What is the input string?")
-string: str = input()
 
-while len(string) == 0: 
-    print("You didn't enter anything. Please enter a string.")
-    string: str = input() # Not happy with repeating this line. Refactor. 
-else: 
-    output: str = f'{string} has {str(len(string))} characters.'
-    print(output)
+while True: 
+    string: str = input()
+    if len(string) == 0: 
+        print("You didn't enter anything. Please enter a string.")
+    else: 
+        output: str = f'{string} has {str(len(string))} characters.'
+        print(output)
+        break
