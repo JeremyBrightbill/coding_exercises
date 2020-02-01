@@ -1,5 +1,5 @@
 """Mad lib program that prompts for a noun, verb, an adverb, and an 
-adjective, and injects them into a story.  
+adjective, and injects them into a simple story.  
 
 Constraints: Use a single output statement to produce this output, 
 using appropriate string-escaping techniques for quotes. If your language
