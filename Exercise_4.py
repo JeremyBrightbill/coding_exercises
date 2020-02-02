@@ -15,6 +15,6 @@ print("Enter an adverb:")
 adverb: str = input()
 
 output: str = f'Do you {verb} your {adjective} {noun} {adverb}? \
-That\'s hilarious!'
+That\'s a good story.'
 
 print(output)
