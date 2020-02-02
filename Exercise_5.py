@@ -4,23 +4,30 @@ difference, product, and quotient of those numbers.
 Constraint: Keep the inputs and outputs separate from the numerical
 conversions and other processing.
 
-Challenge: Revise the program to accept only positive numeric values."""
+Challenge: Revise the program to accept only positive numeric values. 
+Break the program into functions."""
 
-print("Enter the first number:")
-num1: str = input()
-print("Enter the second number:")
-num2: str = input()
+def calculate(num1: float, num2: float) -> float:
+    output = (num1 + num2, num1 - num2, \
+        num1 * num2, num1 / num2)
+    return output
 
-num_sum: int = int(num1) + int(num2)
-num_diff: int = int(num1) - int(num2)
-num_prod: int = int(num1) * int(num2)
-num_quot: int = int(num1) / int(num2)
+while True:
 
-output: str = f"""
-{str(num1)} + {str(num2)} = {str(num_sum)}
-{str(num1)} - {str(num2)} = {str(num_diff)}
-{str(num1)} * {str(num2)} = {str(num_prod)}
-{str(num1)} / {str(num2)} = {str(num_quot)}
-"""
+    print("Enter the first number:")
+    num1: str = input()
+    print("Enter the second number:")
+    num2: str = input()
 
-print(output)
+    try: 
+        if float(num1) <= 0 or float(num2) <= 0:
+            print("Please enter a number greater than 0")
+            continue
+        else: 
+            results = calculate(float(num1), float(num2))
+            for operation, result in zip(['+', '-', '*', '/'], results):
+                print(f'{num1} {operation} {num2} = {result}')
+            break
+    except(ValueError): 
+        print("Enter it as a number, don't frikkin spell it out!")
+    
