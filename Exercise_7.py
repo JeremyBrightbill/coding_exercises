@@ -1,4 +1,8 @@
-"""Description
+"""Program that calculates the area of a room. Prompts for length and 
+width of room in feet, then displays area in both square feet and 
+square meters.
+
+Constraint: Use a constant to hold the conversion factor.
 
 TO DO: Refactor methods with @property"""
 
