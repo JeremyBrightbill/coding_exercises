@@ -1,16 +1,17 @@
-"""Description"""
+"""Description
 
-CONVERSION = 0.09290304
+TO DO: Refactor methods with @property"""
 
 class Room(): 
 
-    def __init__(self): 
-        self.length: float = 0
-        self.width: float = 0
+    def __init__(self, length: float, width: float): 
+        self.CONVERSION = 0.09290304
+        self.length: float = length
+        self.width: float = width
 
     def find_area(self):
         self.area_feet: float = self.length * self.width
-        self.area_meters: float = self.area_feet * CONVERSION
+        self.area_meters: float = self.area_feet * self.CONVERSION
 
     def print_output(self):
         output = f"""You entered dimensions of {self.length} feet by {self.width} feet.
@@ -21,10 +22,10 @@ The area is:
 
 if __name__ == "__main__":
 
-    room = Room()
     print("What is the length of the room in feet?")
-    room.length = float(input())
+    length: str = input()
     print("What is the width of the room in feet?")
-    room.width = float(input())
+    width: str = input()
+    room = Room(int(length), int(width))
     room.find_area()
     room.print_output()
