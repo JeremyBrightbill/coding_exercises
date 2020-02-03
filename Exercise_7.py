@@ -17,12 +17,12 @@ class Room():
         self.area_feet: float = self.length * self.width
         self.area_meters: float = self.area_feet * self.CONVERSION
 
-    def print_output(self):
-        output = f"""You entered dimensions of {self.length} feet by {self.width} feet.
+    def __repr__(self):
+        return \
+f"""You entered dimensions of {self.length} feet by {self.width} feet.
 The area is:
 {self.area_feet} square feet
 {self.area_meters} square meters"""
-        print(output)
 
 if __name__ == "__main__":
 
@@ -32,4 +32,4 @@ if __name__ == "__main__":
     width: str = input()
     room = Room(int(length), int(width))
     room.find_area()
-    room.print_output()
+    print(room)
