@@ -20,11 +20,6 @@ class Item():
     def __repr__(self): 
         return f'{self.val} {self.unit}'
 
-class CalculatedItem(Item):
-    """For per person and remainder"""
-    def __init__(self): 
-        super().__init__()
-
 class Event():
     """The entire event, composed of people, pizzas, and pieces items."""
     def __init__(self, people: int, pizzas: int, pieces: int): 
