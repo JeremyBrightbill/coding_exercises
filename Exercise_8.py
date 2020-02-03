@@ -3,9 +3,11 @@ pizzas, and number of slices per pizza. Ensures that the number of slices per
 person comes out even. Displays the number of pieces each person should get, 
 plus any remainder.
 
-Challenge: Allow only numeric input. Handle pluralization (piece vs. pieces).
+Challenge: Handle pluralization (piece vs. pieces)."""
 
-WORK IN PROGRESS"""
+import inflect
+
+p = inflect.engine()
 
 class Event():
 
@@ -16,12 +18,14 @@ class Event():
         self.per_person = (self.pizzas * self.pieces) // self.people
         self.remainder = (self.pizzas * self.pieces) % self.people
     
+    # Using inflect module, conditionally form plural based on number
     def __repr__(self): 
         return \
-f"""{self.people} people with {self.pizzas} pizzas, {self.pieces} slices per pizza. 
-Each person gets {self.per_person} slices of pizza. 
-There are {self.remainder} slices left over."""
+f"""{self.people} {p.plural("person", self.people)} with {self.pizzas} {p.plural("pizza", self.pizzas)}, \
+{self.pieces} {p.plural("slice", self.pieces)} per pizza. 
+Each person gets {self.per_person} {p.plural("slice", self.per_person)} of pizza. 
+There {p.plural_verb("is", self.remainder)} {self.remainder} {p.plural("slice", self.remainder)} left over."""
 
 if __name__ == "__main__":
-    event = Event(3, 4, 13)
+    event = Event(2, 1, 3)
     print(event)
