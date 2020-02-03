@@ -13,8 +13,6 @@ class Event():
         self.people = people
         self.pizzas = pizzas
         self.pieces = pieces
-
-    def calculate(self): 
         self.per_person = (self.pizzas * self.pieces) // self.people
         self.remainder = (self.pizzas * self.pieces) % self.people
     
@@ -26,5 +24,4 @@ There are {self.remainder} slices left over."""
 
 if __name__ == "__main__":
     event = Event(3, 4, 13)
-    event.calculate()
     print(event)
