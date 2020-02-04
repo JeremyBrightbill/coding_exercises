@@ -26,10 +26,16 @@ class Event():
         self.people = Item('person', people)
         self.pizzas = Item('pizza', pizzas)
         self.pieces = Item('piece', pieces)
-        self._per_person = (self.pizzas.val * self.pieces.val) // self.people.val
-        self.per_person = Item('piece', self._per_person)
-        self._remainder = (self.pizzas.val * self.pieces.val) % self.people.val
-        self.remainder = Item('piece', self._remainder)
+
+    @property
+    def per_person(self): 
+        per = (self.pizzas.val * self.pieces.val) // self.people.val
+        return Item('piece', per)
+
+    @property
+    def remainder(self):
+        rem = (self.pizzas.val * self.pieces.val) % self.people.val
+        return Item('piece', rem)
 
     def __repr__(self): 
         return f'{self.people} with {self.pizzas}, {self.pieces} per pizza.\n' + \
