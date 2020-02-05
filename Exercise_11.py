@@ -11,14 +11,17 @@ for the countries instead of the rates.
 
 import sys
 
-# TO DO: Set up API https://openexchangerates.org/
+API_BASE = https://openexchangerates.org/api/
+# TO DO: Set APP_ID as environment variable 
+
+try: 
+    currency = sys.argv[1]
+    amount = sys.argv[2]
+    output = (currency, amount)
+except(IndexError):
+    output = "Please enter the currency and the amount"
 
 if __name__ == '__main__':
     
-    try: 
-        currency = sys.argv[1]
-        amount = sys.argv[2]
-        print((currency, amount))
-    except(IndexError):
-        print("Please enter the currency and the amount")
+    print(output)
     
