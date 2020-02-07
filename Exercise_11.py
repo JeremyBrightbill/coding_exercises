@@ -1,4 +1,4 @@
-"""Program to convert euros to US dollars. 
+"""Program to convert any currency to US dollars. 
 
 Constraints: Ensure that fractions of a cent are rounded up to
 the next penny. 
@@ -24,7 +24,7 @@ endpoint: str = os.path.join(API_BASE, ('latest.json?app_id=' + APP_ID))
 response = requests.get(endpoint)
 
 try: 
-    currency; str = sys.argv[1]
+    currency: str = sys.argv[1]
     amount:str = sys.argv[2]
     output = (currency, amount)
 except(IndexError):
