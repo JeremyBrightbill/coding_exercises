@@ -12,17 +12,20 @@ for the countries instead of the rates.
 import os
 import requests
 import sys
+from dotenv import load_dotenv
+from typing import Tuple
 
-API_BASE = 'https://openexchangerates.org/api/'
-APP_ID = os.environ['APP_ID']
-endpoint = os.path.join(API_BASE, ('latest.json?app_id=' + APP_ID))
+load_dotenv() # Contains APP_ID as environment variable from .env file
+API_BASE: str = 'https://openexchangerates.org/api/'
+APP_ID: str = os.environ['APP_ID']
+endpoint: str = os.path.join(API_BASE, ('latest.json?app_id=' + APP_ID))
 
 # Wrap this in try except
 response = requests.get(endpoint)
 
 try: 
-    currency = sys.argv[1]
-    amount = sys.argv[2]
+    currency; str = sys.argv[1]
+    amount:str = sys.argv[2]
     output = (currency, amount)
 except(IndexError):
     output = "Please enter the currency and the amount"
