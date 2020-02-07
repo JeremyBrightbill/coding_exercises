@@ -1,4 +1,4 @@
-"""Program to convert any currency to US dollars. 
+"""Program to convert any currency to US dollars. IN PROGRESS
 
 Constraints: Ensure that fractions of a cent are rounded up to
 the next penny. 
@@ -20,7 +20,7 @@ API_BASE: str = 'https://openexchangerates.org/api/'
 APP_ID: str = os.environ['APP_ID']
 endpoint: str = os.path.join(API_BASE, ('latest.json?app_id=' + APP_ID))
 
-# Wrap this in try except
+# TO DO: Wrap this in try except
 response = requests.get(endpoint)
 
 try: 
@@ -33,4 +33,4 @@ except(IndexError):
 if __name__ == '__main__':
     # Temporary test
     print(response.json())
-    
+    # TO DO: Set up the rest of functionality
