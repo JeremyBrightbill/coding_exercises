@@ -35,10 +35,8 @@ def get_rates(endpoint: str, currency: str) -> float:
     parsed = response.json() 
     return parsed['rates'][currency]
 
-# TO DO: Make sure the math is right (understand what the API is returning)
-
 def convert_amount(rate: float, amount: float) -> float:
-    return rate * amount
+    return amount / rate
 
 # TO DO: Wrap this in try except
 
