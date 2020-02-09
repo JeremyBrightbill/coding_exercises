@@ -13,42 +13,66 @@ Challenges:
 for the countries instead of the rates. 
 * Get exchange rates from an API."""
 
-import json
-import os
-import requests
-import sys
+import argparse, os, requests, sys
 from dotenv import load_dotenv
-from typing import Tuple
+from typing import Tuple # And others
 
 load_dotenv() # Contains APP_ID as environment variable from .env file
 API_BASE: str = 'https://openexchangerates.org/api/'
 APP_ID: str = os.environ['APP_ID']
-endpoint: str = os.path.join(API_BASE, ('latest.json?app_id=' + APP_ID))
-
-try: 
-    input_currency: str = sys.argv[1]
-    input_amount: float = float(sys.argv[2])
-except(IndexError):
-    output = "Please enter the currency and the amount"
 
 # TO DO: Make a class
 
-def get_rates(endpoint: str, currency: str) -> float:
+def get_rates_all() -> dict:
+    endpoint: str = f'{API_BASE}latest.json?app_id={APP_ID}'
     response = requests.get(endpoint)
-    parsed = response.json() 
-    return parsed['rates'][currency]
+    return response.json()['rates']
 
-def convert_amount(rate: float, amount: float) -> float:
+# def get_rate(currency: str, rates: dict) -> float: 
+#     return rates[currency]
+
+def to_usd(amount: float, rate: float) -> float: 
     return amount / rate
+
+def from_usd(amount: float, rate: float) -> float: 
+    return amount * rate
+
+def validate_input(rates: dict) -> dict: 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("amount", help="amount", type=float)
+    parser.add_argument("currency_from", help="currency to convert from", type=str)
+    parser.add_argument("currency_to", help="currency to convert to", type=str)
+    args = parser.parse_args()
+    if (args.currency_from not in rates) or (args.currency_to not in rates): 
+        raise ValueError("Invalid currency")
+    return vars(args)
+
+def do_conversion(amount: float, currency1: str, currency2: str, rates: dict) -> float: 
+    if currency1 == 'USD': 
+        rate = rates[currency2]
+        return from_usd(amount, rate)
+    if currency2 == 'USD': 
+        rate = rates[currency1]
+        return to_usd(amount, rate)
+    else: 
+        rate1, rate2 = rates[currency1], rates[currency2]
+        amount_usd = to_usd(amount, rate1)
+        amount_out = from_usd(amount_usd, rate2)
+        return amount_out
 
 # TO DO: Wrap this in try except
 
 if __name__ == '__main__':
-    rate = get_rates(endpoint, input_currency)
-    out_amount = convert_amount(rate, input_amount)
+    
+    rates = get_rates_all()
+    inputs = validate_input(rates)
+    amount, currency_from, currency_to = inputs.values()
+    
 
-    output = f'{str(input_amount)} units of currency {input_currency} = \
-{str(out_amount)} USD'
+#     output = f'{str(input_amount)} units of currency {input_currency} = \
+# {str(out_amount)} USD'
 
-    print(output)
+    #output = problematic
+
+    print([amount, currency_from, currency_to])
     
