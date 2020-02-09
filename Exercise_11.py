@@ -1,9 +1,12 @@
-"""Program to convert any currency to US dollars. WORK IN PROGRESS
+"""Program to perform currency conversions. WORK IN PROGRESS
 
 Constraints: Ensure that fractions of a cent are rounded up to
 the next penny. 
 
-My innovation: Use command line arguments instead of prompts
+My innovations: 
+* Use command line arguments instead of prompts
+* Allow conversion between any currencies: 
+*    $ python Exercise_11.py 10 USD EUR converts 10 USD to EUR
 
 Challenges: 
 * Build a dictionary of conversion rates and prompt 
