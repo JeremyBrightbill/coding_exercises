@@ -13,7 +13,11 @@ Challenges:
 for the countries instead of the rates. 
 * Get exchange rates from an API."""
 
-import argparse, os, requests, sys
+import argparse
+import math
+import os
+import requests
+import sys
 from dotenv import load_dotenv
 from typing import Tuple # And others
 
@@ -27,9 +31,6 @@ def get_rates_all() -> dict:
     endpoint: str = f'{API_BASE}latest.json?app_id={APP_ID}'
     response = requests.get(endpoint)
     return response.json()['rates']
-
-# def get_rate(currency: str, rates: dict) -> float: 
-#     return rates[currency]
 
 def to_usd(amount: float, rate: float) -> float: 
     return amount / rate
@@ -47,7 +48,7 @@ def validate_input(rates: dict) -> dict:
         raise ValueError("Invalid currency")
     return vars(args)
 
-def do_conversion(amount: float, currency1: str, currency2: str, rates: dict) -> float: 
+def convert_currency(amount: float, currency1: str, currency2: str, rates: dict) -> float: 
     if currency1 == 'USD': 
         rate = rates[currency2]
         return from_usd(amount, rate)
@@ -60,19 +61,17 @@ def do_conversion(amount: float, currency1: str, currency2: str, rates: dict) ->
         amount_out = from_usd(amount_usd, rate2)
         return amount_out
 
-# TO DO: Wrap this in try except
+def round_up(n: float, decimals: int) -> float:
+    multiplier = 10 ** decimals
+    return math.ceil(n * multiplier) / multiplier
 
 if __name__ == '__main__':
     
     rates = get_rates_all()
     inputs = validate_input(rates)
     amount, currency_from, currency_to = inputs.values()
-    
+    converted = convert_currency(amount, currency_from, currency_to, rates)
+    output = format(round_up(converted, 2), '.2f')
 
-#     output = f'{str(input_amount)} units of currency {input_currency} = \
-# {str(out_amount)} USD'
-
-    #output = problematic
-
-    print([amount, currency_from, currency_to])
+    print(output)
     
