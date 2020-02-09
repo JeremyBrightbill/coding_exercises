@@ -22,6 +22,16 @@ load_dotenv() # Contains APP_ID as environment variable from .env file
 API_BASE: str = 'https://openexchangerates.org/api/'
 APP_ID: str = os.environ['APP_ID']
 
+def to_usd(amount: float, rate: float) -> float: 
+    return amount / rate
+
+def from_usd(amount: float, rate: float) -> float: 
+    return amount * rate
+
+def round_up(n: float, decimals: int) -> float:
+    multiplier = 10 ** decimals
+    return math.ceil(n * multiplier) / multiplier
+
 class Converter(): 
 
     def __init__(self) -> None:
@@ -31,14 +41,6 @@ class Converter():
         endpoint: str = f'{API_BASE}latest.json?app_id={APP_ID}'
         response = requests.get(endpoint)
         return response.json()['rates']
-
-    @staticmethod
-    def to_usd(amount: float, rate: float) -> float: 
-        return amount / rate
-
-    @staticmethod
-    def from_usd(amount: float, rate: float) -> float: 
-        return amount * rate
 
     def validate_input(self) -> None: 
         parser = argparse.ArgumentParser()
@@ -54,20 +56,15 @@ class Converter():
     def convert_currency(self) -> float: 
         if self.currency_from == 'USD': 
             rate = self.rates[self.currency_from]
-            self.output = Converter.from_usd(self.amount, rate)
+            self.output = from_usd(self.amount, rate)
         if self.currency_to == 'USD': 
             rate = self.rates[self.currency_to]
-            self.output = Converter.to_usd(self.amount, rate)
+            self.output = to_usd(self.amount, rate)
         else: 
             rate1, rate2 = self.rates[self.currency_from], self.rates[self.currency_to]
-            amount_usd = Converter.to_usd(self.amount, rate1)
-            self.output = Converter.from_usd(amount_usd, rate2)
-        return format(Converter.round_up(self.output, 2), '.2f')
-
-    @staticmethod
-    def round_up(n: float, decimals: int) -> float:
-        multiplier = 10 ** decimals
-        return math.ceil(n * multiplier) / multiplier
+            amount_usd = to_usd(self.amount, rate1)
+            self.output = from_usd(amount_usd, rate2)
+        return format(round_up(self.output, 2), '.2f')
 
 if __name__ == '__main__':
     
