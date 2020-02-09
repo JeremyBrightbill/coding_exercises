@@ -22,6 +22,8 @@ load_dotenv() # Contains APP_ID as environment variable from .env file
 API_BASE: str = 'https://openexchangerates.org/api/'
 APP_ID: str = os.environ['APP_ID']
 
+# TO DO: Move these utility functions to a package
+
 def to_usd(amount: float, rate: float) -> float: 
     return amount / rate
 
@@ -42,6 +44,8 @@ class Converter():
         response = requests.get(endpoint)
         return response.json()['rates']
 
+    # TO DO: Error should return list of available currencies
+    
     def validate_input(self) -> None: 
         parser = argparse.ArgumentParser()
         parser.add_argument("amount", help="amount", type=float)
@@ -55,10 +59,10 @@ class Converter():
 
     def convert_currency(self) -> float: 
         if self.currency_from == 'USD': 
-            rate = self.rates[self.currency_from]
+            rate = self.rates[self.currency_to]
             self.output = from_usd(self.amount, rate)
         if self.currency_to == 'USD': 
-            rate = self.rates[self.currency_to]
+            rate = self.rates[self.currency_from]
             self.output = to_usd(self.amount, rate)
         else: 
             rate1, rate2 = self.rates[self.currency_from], self.rates[self.currency_to]
