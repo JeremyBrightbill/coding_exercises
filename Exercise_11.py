@@ -4,14 +4,12 @@ Constraints: Ensure that fractions of a cent are rounded up to
 the next penny. 
 
 My innovations: 
+* Get exchange rates from Open Exchange API
 * Use command line arguments instead of prompts
-* Allow conversion between any currencies: 
-*    $ python Exercise_11.py 10 USD EUR converts 10 USD to EUR
-
-Challenges: 
-* Build a dictionary of conversion rates and prompt 
-for the countries instead of the rates. 
-* Get exchange rates from an API."""
+* Allow conversion between any currencies with the following input: 
+     $ python Exercise_11.py 10 USD EUR converts 10 USD to EUR
+* Validate inputs using argparse
+"""
 
 import argparse
 import math
@@ -19,59 +17,63 @@ import os
 import requests
 import sys
 from dotenv import load_dotenv
-from typing import Tuple # And others
 
 load_dotenv() # Contains APP_ID as environment variable from .env file
 API_BASE: str = 'https://openexchangerates.org/api/'
 APP_ID: str = os.environ['APP_ID']
 
-# TO DO: Make a class
+class Converter(): 
 
-def get_rates_all() -> dict:
-    endpoint: str = f'{API_BASE}latest.json?app_id={APP_ID}'
-    response = requests.get(endpoint)
-    return response.json()['rates']
+    def __init__(self) -> None:
+        self.rates: dict = self.get_rates_all()
 
-def to_usd(amount: float, rate: float) -> float: 
-    return amount / rate
+    def get_rates_all(self) -> dict:
+        endpoint: str = f'{API_BASE}latest.json?app_id={APP_ID}'
+        response = requests.get(endpoint)
+        return response.json()['rates']
 
-def from_usd(amount: float, rate: float) -> float: 
-    return amount * rate
+    @staticmethod
+    def to_usd(amount: float, rate: float) -> float: 
+        return amount / rate
 
-def validate_input(rates: dict) -> dict: 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("amount", help="amount", type=float)
-    parser.add_argument("currency_from", help="currency to convert from", type=str)
-    parser.add_argument("currency_to", help="currency to convert to", type=str)
-    args = parser.parse_args()
-    if (args.currency_from not in rates) or (args.currency_to not in rates): 
-        raise ValueError("Invalid currency")
-    return vars(args)
+    @staticmethod
+    def from_usd(amount: float, rate: float) -> float: 
+        return amount * rate
 
-def convert_currency(amount: float, currency1: str, currency2: str, rates: dict) -> float: 
-    if currency1 == 'USD': 
-        rate = rates[currency2]
-        return from_usd(amount, rate)
-    if currency2 == 'USD': 
-        rate = rates[currency1]
-        return to_usd(amount, rate)
-    else: 
-        rate1, rate2 = rates[currency1], rates[currency2]
-        amount_usd = to_usd(amount, rate1)
-        amount_out = from_usd(amount_usd, rate2)
-        return amount_out
+    def validate_input(self) -> None: 
+        parser = argparse.ArgumentParser()
+        parser.add_argument("amount", help="amount", type=float)
+        parser.add_argument("currency_from", help="currency to convert from", type=str)
+        parser.add_argument("currency_to", help="currency to convert to", type=str)
+        args = parser.parse_args()
+        if (args.currency_from not in self.rates) or (args.currency_to not in self.rates): 
+            raise ValueError("Invalid currency")
+        inputs = vars(args)
+        self.amount, self.currency_from, self.currency_to = inputs.values()
 
-def round_up(n: float, decimals: int) -> float:
-    multiplier = 10 ** decimals
-    return math.ceil(n * multiplier) / multiplier
+    def convert_currency(self) -> float: 
+        if self.currency_from == 'USD': 
+            rate = self.rates[self.currency_from]
+            self.output = Converter.from_usd(self.amount, rate)
+        if self.currency_to == 'USD': 
+            rate = self.rates[self.currency_to]
+            self.output = Converter.to_usd(self.amount, rate)
+        else: 
+            rate1, rate2 = self.rates[self.currency_from], self.rates[self.currency_to]
+            amount_usd = Converter.to_usd(self.amount, rate1)
+            self.output = Converter.from_usd(amount_usd, rate2)
+        return format(Converter.round_up(self.output, 2), '.2f')
+
+    @staticmethod
+    def round_up(n: float, decimals: int) -> float:
+        multiplier = 10 ** decimals
+        return math.ceil(n * multiplier) / multiplier
 
 if __name__ == '__main__':
     
-    rates = get_rates_all()
-    inputs = validate_input(rates)
-    amount, currency_from, currency_to = inputs.values()
-    converted = convert_currency(amount, currency_from, currency_to, rates)
-    output = format(round_up(converted, 2), '.2f')
+    converter = Converter()
+    converter.validate_input()
+    output = converter.convert_currency()
 
     print(output)
     
