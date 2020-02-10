@@ -7,10 +7,7 @@ conversions and other processing.
 Challenge: Revise the program to accept only positive numeric values. 
 Break the program into functions."""
 
-def calculate(num1: float, num2: float) -> float:
-    output = (num1 + num2, num1 - num2, \
-        num1 * num2, num1 / num2)
-    return output
+from utilities_ import calculate_all
 
 if __name__ == "__main__":
 
@@ -26,7 +23,7 @@ if __name__ == "__main__":
                 print("Please enter a number greater than 0")
                 continue
             else: 
-                results = calculate(float(num1), float(num2))
+                results = calculate_all(float(num1), float(num2))
                 for operation, result in zip(['+', '-', '*', '/'], results):
                     print(f'{num1} {operation} {num2} = {result}')
                 break

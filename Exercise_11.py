@@ -7,32 +7,21 @@ My innovations:
 * Get exchange rates from Open Exchange API
 * Use command line arguments instead of prompts
 * Allow conversion between any currencies with the following input: 
-     $ python Exercise_11.py 10 USD EUR converts 10 USD to EUR
+     $ python Exercise_11.py 10 USD EUR # converts 10 USD to EUR
 * Validate inputs using argparse
 """
 
 import argparse
-import math
 import os
 import requests
 import sys
 from dotenv import load_dotenv
 
+from utilities_ import to_usd, from_usd, round_up
+
 load_dotenv() # Contains APP_ID as environment variable from .env file
 API_BASE: str = 'https://openexchangerates.org/api/'
 APP_ID: str = os.environ['APP_ID']
-
-# TO DO: Move these utility functions to a package
-
-def to_usd(amount: float, rate: float) -> float: 
-    return amount / rate
-
-def from_usd(amount: float, rate: float) -> float: 
-    return amount * rate
-
-def round_up(n: float, decimals: int) -> float:
-    multiplier = 10 ** decimals
-    return math.ceil(n * multiplier) / multiplier
 
 class Converter(): 
 
