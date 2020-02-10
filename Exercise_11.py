@@ -55,7 +55,7 @@ class Converter():
             rate1, rate2 = self.rates[self.currency_from], self.rates[self.currency_to]
             amount_usd = to_usd(self.amount, rate1)
             self.output = from_usd(amount_usd, rate2)
-        return format(round_up(self.output, 2), '.2f')
+        return format(round_up(self.output, 2), '.2f') # Fill out zeros if needed
 
 if __name__ == '__main__':
     
