@@ -1,4 +1,4 @@
-"""Program to perform currency conversions. WORK IN PROGRESS
+"""Program to perform currency conversions.
 
 Constraints: Ensure that fractions of a cent are rounded up to
 the next penny. 
@@ -8,8 +8,7 @@ My innovations:
 * Use command line arguments instead of prompts
 * Allow conversion between any currencies with the following input: 
      $ python Exercise_11.py 10 USD EUR # converts 10 USD to EUR
-* Validate inputs using argparse
-"""
+* Validate inputs using argparse"""
 
 import argparse
 import os
@@ -27,13 +26,12 @@ class Converter():
 
     def __init__(self) -> None:
         self.rates: dict = self.get_rates_all()
+        self.currencies = list(self.rates.keys()) # For printing in validation error message
 
     def get_rates_all(self) -> dict:
         endpoint: str = f'{API_BASE}latest.json?app_id={APP_ID}'
         response = requests.get(endpoint)
         return response.json()['rates']
-
-    # TO DO: Error should return list of available currencies
     
     def validate_input(self) -> None: 
         parser = argparse.ArgumentParser()
@@ -41,8 +39,8 @@ class Converter():
         parser.add_argument("currency_from", help="currency to convert from", type=str)
         parser.add_argument("currency_to", help="currency to convert to", type=str)
         args = parser.parse_args()
-        if (args.currency_from not in self.rates) or (args.currency_to not in self.rates): 
-            raise ValueError("Invalid currency")
+        if not (args.currency_from in self.rates and args.currency_to in self.rates): 
+            parser.error(f"Currency not recognized. Choose from the following:\n {self.currencies}")
         inputs = vars(args)
         self.amount, self.currency_from, self.currency_to = inputs.values()
 
